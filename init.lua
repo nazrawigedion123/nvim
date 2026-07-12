@@ -1,2 +1,2 @@
 require("nazri")
-print("hello")
+--print("hello")
