@@ -55,25 +55,38 @@ vim.diagnostic.config({
   },
 })
 
--- For Go: organize imports and format before save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*.go",
-  callback = function()
-    local params = vim.lsp.util.make_range_params()
-    params.context = { only = { "source.organizeImports" } }
-    local results = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-    for _, res in pairs(results or {}) do
-      for _, r in pairs(res.result or {}) do
-        if r.edit then
-          vim.lsp.util.apply_workspace_edit(r.edit)
-        else
-          if r.command then
-            vim.lsp.buf.execute_command(r.command)
-          end
-        end
+-- For Go: add missing imports, organize imports, and format before save
+local function go_organize_imports_and_format()
+  local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
+  if #clients == 0 then
+    return
+  end
+
+  local client = clients[1]
+  local params = vim.lsp.util.make_range_params(0, client.offset_encoding)
+  params.context = {
+    only = { "source.addMissingImports", "source.organizeImports", "source.fixAll" },
+  }
+
+  local ok, results = pcall(vim.lsp.buf_request_sync, 0, "textDocument/codeAction", params, 3000)
+  if not ok then
+    return
+  end
+
+  for _, res in pairs(results or {}) do
+    for _, r in pairs(res.result or {}) do
+      if r.edit then
+        vim.lsp.util.apply_workspace_edit(r.edit)
+      elseif r.command then
+        vim.lsp.buf.execute_command(r.command)
       end
     end
-    -- format using attached LSP if available
-    vim.lsp.buf.format({ async = false })
-  end,
+  end
+
+  vim.lsp.buf.format({ async = false })
+end
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = go_organize_imports_and_format,
 })

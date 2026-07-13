@@ -15,3 +15,8 @@ vim.keymap.set('n', '<C-p>', builtin.git_files, { })
 vim.keymap.set('n', '<leader>fs', builtin.live_grep)
 
 
+-- Workspace diagnostics
+vim.keymap.set('n', '<leader>dd', '<cmd>Telescope diagnostics<CR>', { desc = "Diagnostics (Workspace)" })
+
+-- Current buffer diagnostics
+vim.keymap.set('n', '<leader>db', '<cmd>Telescope diagnostics buf=0<CR>', { desc = "Diagnostics (Buffer)" })
