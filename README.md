@@ -74,3 +74,30 @@ Buffer-local mappings (active when LSP server is attached):
 | Event | Pattern | Action |
 |---|---|---|
 | `BufWritePre` | `*.go` | Auto-organize imports and format on save |
+
+## Debug (nvim-dap + nvim-dap-go)
+
+| Key | Mode | Action |
+|---|---|---|
+| `<leader>db` | n | Toggle breakpoint |
+| `<leader>dc` | n | Continue/start debugging |
+| `<leader>dso` | n | Step over |
+| `<leader>dsi` | n | Step into |
+| `<leader>dsx` | n | Step out |
+| `<leader>dr` | n | Open DAP REPL |
+| `<leader>dl` | n | Re-run last debug session |
+
+### Go Debug Configuration
+
+Custom launch configuration for `cmd/main.go`:
+
+```lua
+{
+  type = "go",
+  name = "Debug cmd/main.go",
+  request = "launch",
+  program = "${workspaceFolder}/cmd/main.go",
+}
+```
+
+Select **"Debug cmd/main.go"** when starting a debug session.
