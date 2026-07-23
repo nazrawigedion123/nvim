@@ -25,7 +25,7 @@ return {
     build = ":TSUpdate",
     opts = {
       ensure_installed = {
-        "c", "lua", "vim", "vimdoc", "query", "javascript", "typescript", "tsx", "jsdoc", "html",
+        "python","c", "lua", "vim", "vimdoc", "query", "javascript", "typescript", "tsx", "jsdoc", "html",
         "go", "gomod", "gowork", "rust", "toml",
       },
       sync_install = false,
@@ -68,7 +68,7 @@ return {
     dependencies = { "mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "gopls", "rust_analyzer", "ts_ls" },
+        ensure_installed = { "pyright","lua_ls", "gopls", "rust_analyzer", "ts_ls" },
       })
     end,
   },
